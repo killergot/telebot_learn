@@ -2,9 +2,9 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
-from handlers import other_handlers, user_handlers, wordly, calback, weather
-from database.sqlite import db_start
-
+from handlers import router
+from database.sqlite import database_init
+from keyboard.set_menu import set_main_menu
 
 # Функция конфигурирования и запуска бота
 async def main():
@@ -20,16 +20,14 @@ async def main():
 
 
     # Регистриуем роутеры в диспетчере
-    dp.include_router(user_handlers.router)
-    dp.include_router(calback.router)
-    dp.include_router(wordly.router)
-    dp.include_router(weather.router)
-    dp.include_router(other_handlers.router)
+    dp.include_router(router)
+
+    await set_main_menu(bot)
 
     # Пропускаем накопившиеся апдейты и запускаем polling
     # await bot.delete_webhook(drop_pending_updates=True)
     try:
-        db_start()
+        database_init()
     except:
         print('error DATABASE')
 

@@ -1,6 +1,6 @@
 import sqlite3 as sq
 
-def db_start():
+def database_init():
     global db,cur
 
     db = sq.connect('Data/new.db')

@@ -10,6 +10,7 @@ from database.sqlite import create_photo, get_random_photo
 from lexicon.lexicon import LEXICON_RU
 
 from keyboard.keyboard import kb_main, ikb
+from keyboard.special_keyboard import get_info_kb
 from states.states import basicState
 
 router = Router()
@@ -92,6 +93,16 @@ async def give_command(message: Message,bot:Bot,state: FSMContext,ID_MY_GIRL):
                            text='Введите сообщение, которое хотите передать своей коллеге по сексу: ',
                            reply_markup=ReplyKeyboardRemove())
     await state.set_state(basicState.broadcast)
+
+@router.message(Command(commands='get_info'),F.chat.type == 'private')
+async def give_command(message: Message):
+    await message.answer(text='Вот несколько специальных кнопок',
+                         reply_markup=get_info_kb)
+
+@router.message(Command(commands='get_info'))
+async def give_command(message: Message):
+    await message.answer(text='Данная команда создана для личных чатов')
+
 
 @router.message(basicState.broadcast)
 async def broadcast_command(message: Message,bot:Bot, state: FSMContext,ID_MY_GIRL,MY_ID):

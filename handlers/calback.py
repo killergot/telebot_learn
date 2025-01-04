@@ -3,16 +3,9 @@ from aiogram.types import CallbackQuery, InputMediaPhoto
 
 from database.sqlite import delete_photo, get_random_photo
 from keyboard.keyboard import ikb, kb_main
-from states.states import gameState
 from handlers.user_handlers import monke
 
 router = Router()
-
-
-@router.callback_query(gameState.inGame)
-async def basic_callback(callback: CallbackQuery):
-    await callback.answer(text='Это просто буква, не тыкай')
-
 
 @router.callback_query()
 async def photo_callback(callback: CallbackQuery):

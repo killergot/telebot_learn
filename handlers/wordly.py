@@ -2,7 +2,7 @@ from distutils.dist import command_re
 
 from aiogram import types, Bot, Router, F
 from aiogram.enums import ParseMode
-from aiogram.types import ReplyKeyboardRemove
+from aiogram.types import ReplyKeyboardRemove, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from states.states import gameState
 from aiogram.filters import Command
@@ -42,7 +42,7 @@ async def menu_command(message: types.Message, bot: Bot, state: FSMContext):
     await bot.send_message(chat_id=message.chat.id,
                            text='Какое слово хотите загадать?',
                            reply_markup=ReplyKeyboardRemove())
-    await state.set_state(gameState.choice)
+    await state.set_state(gameState.choise)
 
 
 @router.message(gameState.choise)
@@ -63,7 +63,7 @@ async def game_choise(message: types.Message, bot: Bot, state: FSMContext,ID_MY_
 async def game_confirm(message: types.Message, bot: Bot, state: FSMContext):
     if message.text == 'Все верно':
         await bot.send_message(chat_id=message.chat.id,
-                               text='Слово загруженно',
+                               text='Слово загружено',
                                reply_markup=kb_main)
         await state.clear()
     elif message.text == 'Поменяем':
@@ -177,3 +177,8 @@ async def start_game(message: types.Message, bot: Bot, state: FSMContext):
                                    reply_markup=kb_main)
     else:
         await message.answer('Не может быть слово другой длины, попробуйте снова')
+
+
+@router.callback_query(gameState.inGame)
+async def basic_callback(callback: CallbackQuery):
+    await callback.answer(text='Это просто буква, не тыкай')

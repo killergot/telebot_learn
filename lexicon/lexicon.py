@@ -11,6 +11,7 @@ LEXICON_RU: dict[str, str] = {
 <b>/game</b> - <em>Игра в угадывание слов</em>
 <b>/links</b> - <em>Позволяет добавить фото</em>
 <b>/cancel</b> - <em>Отменяет любое действие</em>
+<b>/get_info</b> - <em>Тест специальных кнопок</em>
     """,
     'no_echo': 'Не получается повторить..',
     'send_photo': 'Отправьте фотографию',
@@ -19,5 +20,14 @@ LEXICON_RU: dict[str, str] = {
         'temp': 'Температура:',
         'wind_speed': 'Cкорость ветра:',
         'detailed_status': 'В данном городе сейчас'
+    },
+    'wordly':{
+        'all_okey': 'Все верно',
+        'sdfg':'sadf'
     }
+}
+
+LEXICON_COMMANDS_RU: dict[str, str] = {
+    '/help': 'Список команд',
+    '/cancel': 'Выйти из любого состояния'
 }
