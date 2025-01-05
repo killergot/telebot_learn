@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram import Bot, Dispatcher
 from config_data.config import Config, load_config
@@ -6,8 +7,14 @@ from handlers import router
 from database.sqlite import database_init
 from keyboard.set_menu import set_main_menu
 
+logger = logging.getLogger(__name__)
+
 # Функция конфигурирования и запуска бота
 async def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(filename)s:%(lineno)d #%(levelname)-8s '
+               '[%(asctime)s] - %(name)s - %(message)s')
     # Загружаем конфиг в переменную config
     config: Config = load_config()
 
@@ -29,7 +36,9 @@ async def main():
     try:
         database_init()
     except:
-        print('error DATABASE')
+        logger.error('DATABASE')
+
+    logger.info('Starting bot')
 
     await dp.start_polling(bot)
 

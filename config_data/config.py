@@ -21,7 +21,6 @@ class Config:
 def load_config(path: str | None = None) -> Config:
     env = Env()
     env.read_env(path)
-    print(env("BOT_TOKEN"))
     owm = OWM(env("OWM_TOKEN"))
     mgr = owm.weather_manager()
     return Config(tg_bot=TgBot(token=env('BOT_TOKEN'),
