@@ -62,6 +62,7 @@ async def get_photo(message: Message,
 
 get_photo_router = Router()
 get_photo_router.message.filter(StateFilter(PhotoState.get_photo))
+get_photo_router.callback_query.filter(StateFilter(PhotoState.get_photo))
 
 @get_photo_router.callback_query(F.data == 'like')
 async def callback_photo_like(callback: CallbackQuery):
@@ -93,14 +94,19 @@ async def callback_photo_another(callback: CallbackQuery,
 
 @get_photo_router.callback_query()
 async def callback_photo_(callback: CallbackQuery,
+                          bot: Bot,
                                   state: FSMContext):
     await callback.message.answer(text = 'Вы вернулись в главное меню',
                                   reply_markup=kb_main)
+    temp = await state.get_state()
+    await bot.send_message(chat_id=callback.message.chat.id,
+                           text=str(temp))
     await callback.message.delete()
     await callback.answer()
     await state.clear()
 
 
+router.include_router(get_photo_router)
 
 @router.callback_query(F.data.in_(['like',
                                    'dislike',
@@ -122,7 +128,3 @@ async def photo_photo(message: Message,
 async def photo_photo(message: Message,
                       bot:Bot):
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
-
-router.include_router(get_photo_router)
-
-

@@ -6,4 +6,4 @@ __pycache__/
 .mypy_cache/
 .vscode/
 test.py
-Data
+Data/

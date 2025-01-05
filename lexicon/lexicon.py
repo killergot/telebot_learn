@@ -1,4 +1,4 @@
-LEXICON_RU: dict[str, str] = {
+LEXICON_RU: dict[str, str| dict[str,str]] = {
     '/start': 'Салам пополам плебей. Не знаешь что делать? '
               'Тыкай на /help',
     '/help': """
@@ -32,7 +32,10 @@ LEXICON_RU: dict[str, str] = {
     },
     'wordly':{
         'all_okey': 'Все верно',
-        'sdfg':'sadf'
+        'full_kb': 'ёйцукенгшщзхъфывапролджэячсмитьбю',
+        'btn_letter': 'Это просто буква\n'
+                      'Не тыкай!',
+        'another_lenght': 'Не может быть слово другой длины, попробуйте снова'
     },
     'forward': '>>',
     'backward': '<<',

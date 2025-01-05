@@ -41,7 +41,7 @@ def create_inline_kb(tempStr : str) -> InlineKeyboardMarkup:
     keyboard : list[list[InlineKeyboardButton]] = [[],[],[],[],[]]
     counter = 1
     for i in tempStr:
-        keyboard[counter // 8].append(InlineKeyboardButton(text=i,callback_data=i))
+        keyboard[counter // 8].append(InlineKeyboardButton(text=i,callback_data='for_wordly'))
         counter+=1
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

@@ -2,8 +2,8 @@ from aiogram.fsm.state import StatesGroup, State
 
 class gameState(StatesGroup):
     menu = State()
-    preChoise = State()
-    choise = State()
+    preChose = State()
+    chose = State()
     confirm = State()
     inGame = State()
 

@@ -4,6 +4,8 @@ from aiogram import types, Bot, Router, F
 from aiogram.enums import ParseMode
 from aiogram.types import ReplyKeyboardRemove, CallbackQuery
 from aiogram.fsm.context import FSMContext
+
+from lexicon.lexicon import LEXICON_RU
 from states.states import gameState
 from aiogram.filters import Command
 
@@ -42,11 +44,11 @@ async def menu_command(message: types.Message, bot: Bot, state: FSMContext):
     await bot.send_message(chat_id=message.chat.id,
                            text='Какое слово хотите загадать?',
                            reply_markup=ReplyKeyboardRemove())
-    await state.set_state(gameState.choise)
+    await state.set_state(gameState.chose)
 
 
-@router.message(gameState.choise)
-async def game_choise(message: types.Message, bot: Bot, state: FSMContext,ID_MY_GIRL):
+@router.message(gameState.chose)
+async def game_choice(message: types.Message, bot: Bot, state: FSMContext,ID_MY_GIRL):
     global wordForSir, wordForBun
     if message.from_user.id == ID_MY_GIRL:
         wordForSir = message.text.lower()
@@ -67,7 +69,7 @@ async def game_confirm(message: types.Message, bot: Bot, state: FSMContext):
                                reply_markup=kb_main)
         await state.clear()
     elif message.text == 'Поменяем':
-        await state.set_state(gameState.choice)
+        await state.set_state(gameState.chose)
         await bot.send_message(chat_id=message.chat.id,
                                text='Введите новое слово: ',
                                reply_markup=ReplyKeyboardRemove())
@@ -105,7 +107,7 @@ async def check_word(message: types.Message, bot: Bot, state: FSMContext,ID_MY_G
 
 
 counter = 0
-full_kb = 'йёцукенгшщзхъфывапролджэячсмитьбю'
+full_kb = LEXICON_RU['wordly']['full_kb']
 
 
 @router.message(gameState.inGame)
@@ -164,21 +166,21 @@ async def start_game(message: types.Message, bot: Bot, state: FSMContext):
                                    text=f'Вы угадали слово с {counter} попытки!',
                                    reply_markup=kb_main)
             await state.clear()
-            full_kb = 'ёйцукенгшщзхъфывапролджэячсмитьбю'
+            full_kb = LEXICON_RU['wordly']['full_kb']
             tempWord = [[], [], [], [], [], []]
             counter = 0
         elif counter == 6:
             tempWord = [[], [], [], [], [], []]
             counter = 0
-            full_kb = 'ёйцукенгшщзхъфывапролджэячсмитьбю'
+            full_kb = LEXICON_RU['wordly']['full_kb']
             await bot.send_message(chat_id=message.chat.id,
                                    text=f'Вы не угадали слово!!\n'
                                         f'Ваше слово: {wordForGame}',
                                    reply_markup=kb_main)
     else:
-        await message.answer('Не может быть слово другой длины, попробуйте снова')
+        await message.answer(LEXICON_RU['wordly']['another_lenght'])
 
 
-@router.callback_query(gameState.inGame)
+@router.callback_query(F.data == 'for_wordly')
 async def basic_callback(callback: CallbackQuery):
-    await callback.answer(text='Это просто буква, не тыкай')
+    await callback.answer(text=LEXICON_RU['wordly']['btn_letter'])
