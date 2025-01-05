@@ -1,4 +1,5 @@
-from aiogram.filters import Command
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.state import default_state
 
 from keyboard.keyboard import kb_main
 from lexicon.lexicon import LEXICON_RU
@@ -11,15 +12,21 @@ from aiogram.fsm.context import FSMContext
 
 router = Router()
 
-@router.message(Command(commands=['weather']))
+@router.message(Command(commands=['weather']),StateFilter(default_state))
 async def weather_command(message: Message, bot: Bot, state: FSMContext):
     await bot.send_message(chat_id=message.chat.id,
-                           text='Введите название города:',
+                           text=LEXICON_RU['weather']['in_city'],
                            reply_markup=ReplyKeyboardRemove())
     await state.set_state(basicState.weather)
 
 
-@router.message(basicState.weather)
+@router.message(StateFilter(basicState.weather),
+                Command(commands='cancel'))
+async def cancel_command(message: Message, bot: Bot, state: FSMContext):
+    await bot.send_message(chat_id=message.chat.id,
+                           text=LEXICON_RU['weather']['cancel'])
+
+@router.message(StateFilter(basicState.weather))
 async def echo_weather(message: Message,bot:Bot, state: FSMContext,mgr):
     try:
         observation = mgr.weather_at_place(message.text)
@@ -36,4 +43,6 @@ async def echo_weather(message: Message,bot:Bot, state: FSMContext,mgr):
                             text=text,
                             reply_markup=kb_main)
         await state.clear()
+
+
 

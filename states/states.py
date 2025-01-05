@@ -10,4 +10,8 @@ class gameState(StatesGroup):
 class basicState(StatesGroup):
     weather = State()
     broadcast = State()
+
+
+class PhotoState(StatesGroup):
     add_photo = State()
+    get_photo = State()

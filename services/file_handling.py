@@ -6,8 +6,6 @@ PAGE_SIZE = 1050
 
 book: dict[int, str] = {}
 
-
-# Функция, возвращающая строку с текстом страницы и ее размер
 def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
     end_signs = ',.!:;?'
     counter = 0
@@ -29,16 +27,16 @@ def _get_part_text(text: str, start: int, size: int) -> tuple[str, int]:
     return page_text, page_size
 
 
-# Функция, формирующая словарь книги
-def prepare_book(path: str) -> None:
-    with open(file=path, mode='r', encoding='utf-8') as file:
-        text = file.read()
-    start, page_number = 0, 1
-    while start < len(text):
-        page_text, page_size = _get_part_text(text, start, PAGE_SIZE)
-        start += page_size
-        book[page_number] = page_text.strip()
-        page_number += 1
+def prepare_book(path: str) -> dict[int, str]:
+    with open(path, 'r', encoding='utf-8') as f:
+        temp = f.read().lstrip()
+    start = 0
+    page = 1
+    while start < len(temp):
+        text, count = _get_part_text(temp, start, PAGE_SIZE)
+        book[page] = text.strip()
+        start += count
+        page += 1
 
 
 # Вызов функции prepare_book для подготовки книги из текстового файла
